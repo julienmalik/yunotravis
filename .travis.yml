@@ -22,9 +22,9 @@ before_install:
 # Setup ssh on host for connection to the docker container
 - eval `ssh-agent -s`
 - ssh-add ssh_key
-- sed -i 's@{{DOCKER_CONTAINER_IP}}@$(docker inspect --format "{{ .NetworkSettings.IPAddress }}" ${CONTAINER_ID})@g' ssh_config
-- sed -i 's@{{DOCKER_CONTAINER_SSH_PORT}}@$(docker port ${CONTAINER_ID} 22)@g' ssh_config
-- sed -i 's@{{TRAVIS_HOME}}@${HOME}@g' ssh_config
+- sed -i "s@{{DOCKER_CONTAINER_IP}}@$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' ${CONTAINER_ID})@g" ssh_config
+- sed -i "s@{{DOCKER_CONTAINER_SSH_PORT}}@$(docker port ${CONTAINER_ID} 22)@g" ssh_config
+- sed -i "s@{{TRAVIS_HOME}}@${HOME}@g" ssh_config
 - cp ssh_config ~/.ssh/config
 - cat ~/.ssh/config
 
