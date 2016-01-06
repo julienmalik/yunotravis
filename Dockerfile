@@ -15,14 +15,14 @@ RUN apt-get update --quiet
 #RUN apt-get install -y --force-yes --no-install-recommends -o Dpkg::Options::="--force-confold" amavisd-new psmisc
 
 # Yunohost Installation
+RUN apt-get install -y --force-yes --no-install-recommends wget
 RUN wget https://raw.githubusercontent.com/YunoHost/install_script/master/install_yunohostv2 -O /tmp/install_yunohostv2
 
 # The install script failed to start dovecot because it is already started
 # Running separately the package doesn't work better because it is in trigger
 # That's why there is these killall & apt-get install -y
 # If you know how do it better don't hesitate to pull request
-RUN export TERM=xterm
-RUN bash /tmp/install_yunohostv2 -a -d testing || true
+RUN env TERM=xterm bash /tmp/install_yunohostv2 -a -d testing || true
 #RUN killall dovecot || true
 #RUN apt-get install -y --force-yes  || true
 #RUN killall dovecot || true
