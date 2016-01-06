@@ -30,6 +30,8 @@ before_install:
 
 # Check connection to the container
 - docker exec -i ${CONTAINER_ID} ps awxuf
+- docker exec -i ${CONTAINER_ID} ls -al /root
+- docker exec -i ${CONTAINER_ID} ls -al /root/.ssh
 - docker exec -i ${CONTAINER_ID} service ssh restart
 - docker exec -i ${CONTAINER_ID} ps awxuf
 - ssh ynh ps awxuf || true
