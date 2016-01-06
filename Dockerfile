@@ -5,6 +5,8 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL C
 ENV TERM=xterm
 
+COPY id_rsa.pub /root/.ssh/authorized_keys
+
 RUN rm -f /usr/sbin/policy-rc.d
 RUN apt-get update --quiet
 
@@ -26,6 +28,7 @@ ADD install_yunohostv2 /tmp/
 RUN echo user=root > /etc/dnsmasq.conf
 
 RUN bash /tmp/install_yunohostv2 -a -d testing || true
+RUN apt-get install -y --force-yes  || true
 
 # The install script failed to start dovecot because it is already started
 # Running separately the package doesn't work better because it is in trigger
