@@ -11,6 +11,7 @@ before_install:
 # Generate SSH key for connection to the docker container
 - ssh-keygen -t rsa -N '' -f ssh_key
 - cp ssh_key ~/.ssh
+- chmod 700 ~/.ssh
 - chmod 600 ~/.ssh/ssh_key
 
 # Build the Yunohost docker image
@@ -31,8 +32,9 @@ before_install:
 - cat ~/.ssh/config
 
 # Check connection to the container
-- docker exec -i ${CONTAINER_ID} ps awxuf
-- docker exec -i ${CONTAINER_ID} hostname -d
+- dockerex() { docker exec -i ${CONTAINER_ID} $* }
+- dockerex ps awxuf
+- dockerex hostname -d
 - docker exec -i ${CONTAINER_ID} ls -al /root
 - docker exec -i ${CONTAINER_ID} ls -al /root/.ssh
 - docker exec -i ${CONTAINER_ID} service ssh start
