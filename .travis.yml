@@ -6,21 +6,30 @@ services:
 - docker
 
 before_install:
+# Generate SSH key for connection to the docker container
 - ssh-keygen -t rsa -N '' -f ssh_key
 - cp ssh_key ~/.ssh
 - chmod 600 ~/.ssh/ssh_key
+
+# Build the Yunohost docker image
 - docker build -t ju/ynh .
+
+# Create and start a docker container from the docker image
 - docker create --name yunotest -h yunohost.yunotest-1.nohost.me -p 2222:22 -p 80:80 -p 443:443 ju/ynh /sbin/init | tee container_id
-- docker ps -a
-- docker start $(cat container_id)
-- sleep 10
-- docker ps -a
-- docker inspect --format '{{ .NetworkSettings.IPAddress }}' $(cat container_id) | tee container_ip
+- export CONTAINER_ID=$(cat container_id)
+- docker start ${CONTAINER_ID}
+
+# Setup ssh on host for connection to the docker container
 - eval `ssh-agent -s`
-- ssh-add deploy_key
-- ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p 2222 root@$(cat container_ip) ps awxuf
+- ssh-add ssh_key
+- sed -i 's@{{DOCKER_CONTAINER_IP}}@$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' ${CONTAINER_ID})@g' ssh_config
+- sed -i 's@{{DOCKER_CONTAINER_SSH_PORT}}@$(docker port ${CONTAINER_ID} 22)@g' ssh_config
+- sed -i 's@{{TRAVIS_HOME}}@${HOME}@g' ssh_config
+- cp ssh_config ~/.ssh/config
+- cat ~/.ssh/config
+
+# Check connection to the container
+- ssh ynh ps awxuf
 
 script:
-# - docker exec -t $(cat container_id) cat /var/log/yunohost-installation.log
-# - docker exec -t $(cat container_id) ps awxuf
 - sudo ps awxuf

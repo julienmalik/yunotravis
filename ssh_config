@@ -1,0 +1,13 @@
+Host ynh
+  Hostname {{DOCKER_CONTAINER_IP}}
+  Port {{DOCKER_CONTAINER_SSH_PORT}}
+  User root
+  IdentityFile {{TRAVIS_HOME}}/.ssh/ssh_key
+  IdentitiesOnly yes
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+  Compression yes
+  ForwardAgent yes
+  TCPKeepAlive yes
+  ServerAliveInterval 5
+  ServerAliveCountMax 100
