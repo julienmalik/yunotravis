@@ -16,6 +16,8 @@ before_install:
 - sleep 10
 - docker ps -a
 - docker inspect --format '{{ .NetworkSettings.IPAddress }}' $(cat container_id) | tee container_ip
+- eval `ssh-agent -s`
+- ssh-add deploy_key
 - ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p 2222 root@$(cat container_ip) ps awxuf
 
 script:
