@@ -15,7 +15,7 @@ before_install:
 - docker build -t ju/ynh .
 
 # Create and start a docker container from the docker image
-- docker create --name yunotest -h yunohost.yunotest-1.nohost.me -p 2222:22 -p 80:80 -p 443:443 ju/ynh /sbin/init | tee container_id
+- docker create --name yunotest -h yunohost.yunotest-1.nohost.me -p 22 -p 80:80 -p 443:443 ju/ynh /sbin/init | tee container_id
 - export CONTAINER_ID=$(cat container_id)
 - docker start ${CONTAINER_ID}
 
@@ -23,7 +23,7 @@ before_install:
 - eval `ssh-agent -s`
 - ssh-add ssh_key
 - sed -i "s@{{DOCKER_CONTAINER_IP}}@$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' ${CONTAINER_ID})@g" ssh_config
-- sed -i "s@{{DOCKER_CONTAINER_SSH_PORT}}@$(docker port ${CONTAINER_ID} 22)@g" ssh_config
+- sed -i "s@{{DOCKER_CONTAINER_SSH_PORT}}@$(docker port ${CONTAINER_ID} 22 | cut -d ':' -f 2)@g" ssh_config
 - sed -i "s@{{TRAVIS_HOME}}@${HOME}@g" ssh_config
 - cp ssh_config ~/.ssh/config
 - cat ~/.ssh/config
