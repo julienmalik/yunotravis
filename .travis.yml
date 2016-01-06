@@ -17,7 +17,7 @@ before_install:
 - docker build -t ju/ynh .
 
 # Create and start a docker container from the docker image
-- docker create --name yunotest -h yunohost.yunotest-1.nohost.me -p 22 -p 80:80 -p 443:443 ju/ynh /sbin/init | tee container_id
+- docker create --name yunotest -h docker.yunotest.me -p 22 -p 80:80 -p 443:443 ju/ynh /sbin/init | tee container_id
 - export CONTAINER_ID=$(cat container_id)
 - docker start ${CONTAINER_ID}
 
@@ -32,9 +32,23 @@ before_install:
 
 # Check connection to the container
 - docker exec -i ${CONTAINER_ID} ps awxuf
+- docker exec -i ${CONTAINER_ID} hostname -d
 - docker exec -i ${CONTAINER_ID} ls -al /root
 - docker exec -i ${CONTAINER_ID} ls -al /root/.ssh
-- docker exec -i ${CONTAINER_ID} service ssh restart
+- docker exec -i ${CONTAINER_ID} service ssh start
+- docker exec -i ${CONTAINER_ID} service cron start
+- docker exec -i ${CONTAINER_ID} service rsyslog start
+- docker exec -i ${CONTAINER_ID} service dnsmasq start
+- docker exec -i ${CONTAINER_ID} service slapd start
+- docker exec -i ${CONTAINER_ID} service nscd start
+- docker exec -i ${CONTAINER_ID} service nslcd start
+- docker exec -i ${CONTAINER_ID} service metronome start
+- docker exec -i ${CONTAINER_ID} service nginx start
+- docker exec -i ${CONTAINER_ID} service php5-fpm start
+- docker exec -i ${CONTAINER_ID} service postfix start
+- docker exec -i ${CONTAINER_ID} service dovecot start
+- docker exec -i ${CONTAINER_ID} service rspamd start
+- docker exec -i ${CONTAINER_ID} service rmilter start
 - docker exec -i ${CONTAINER_ID} ps awxuf
 - ssh -v ynh ps awxuf || true
 - docker exec -i ${CONTAINER_ID} tail -n 100 /var/log/auth.log
