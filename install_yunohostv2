@@ -175,8 +175,9 @@ setup_package_source() {
             echo "Current $DISTRIB only works on Debian Jessie for the moment."
             return 1
         elif [ ! -d /run/systemd/system ]; then
-            echo "Current $DISTRIB only works with systemd for the moment."
-            return 1
+            # echo "Current $DISTRIB only works with systemd for the moment."
+            # return 1
+            echo "No systemd, but continuing anyway..."
         fi
 
         # Make use of new repository
