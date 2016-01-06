@@ -18,7 +18,7 @@ RUN apt-get update --quiet
 # Yunohost Installation
 #RUN apt-get install -y --force-yes --no-install-recommends wget ca-certificates
 #RUN wget https://raw.githubusercontent.com/YunoHost/install_script/master/install_yunohostv2 -O /tmp/install_yunohostv2
-ADD install_yunohostv2 /tmp
+ADD install_yunohostv2 /tmp/
 
 # The install script failed to start dovecot because it is already started
 # Running separately the package doesn't work better because it is in trigger
