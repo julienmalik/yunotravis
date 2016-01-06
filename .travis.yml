@@ -30,6 +30,9 @@ before_install:
 
 # Check connection to the container
 - ssh ynh ps awxuf
+- docker exec -i ${CONTAINER_ID} ps awxuf
+- docker exec -i ${CONTAINER_ID} service ssh restart
+- docker exec -i ${CONTAINER_ID} ps awxuf
 
 script:
 - sudo ps awxuf

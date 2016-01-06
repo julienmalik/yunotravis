@@ -8,10 +8,11 @@ ENV TERM=xterm
 COPY ssh_key.pub /root/.ssh/authorized_keys
 RUN chmod 600 /root/.ssh/authorized_keys
 
+# See http://joeyh.name/blog/entry/docker_run_debian/
 RUN rm -f /usr/sbin/policy-rc.d
-RUN apt-get update --quiet
 
 # Allow amavis running even if uname return a bad hostname
+#RUN apt-get update --quiet
 #ADD 05-node_id /etc/amavis/conf.d/
 #RUN chown root:root /etc/amavis/conf.d/05-node_id
 #RUN chown root:root /etc/amavis
