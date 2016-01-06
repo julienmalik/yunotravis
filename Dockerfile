@@ -6,6 +6,7 @@ ENV LC_ALL C
 ENV TERM=xterm
 
 COPY ssh_key.pub /root/.ssh/authorized_keys
+RUN chmod 600 /root/.ssh/authorized_keys
 
 RUN rm -f /usr/sbin/policy-rc.d
 RUN apt-get update --quiet
