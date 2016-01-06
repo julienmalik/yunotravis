@@ -10,13 +10,13 @@ before_install:
 - cp ssh_key ~/.ssh
 - chmod 600 ~/.ssh/ssh_key
 - docker build -t ju/ynh .
-- docker create --name yunotest -h yunohost.yunotest-1.nohost.me -p 22:22 -p 80:80 -p 443:443 ju/ynh /sbin/init | tee container_id
+- docker create --name yunotest -h yunohost.yunotest-1.nohost.me -p 2222:22 -p 80:80 -p 443:443 ju/ynh /sbin/init | tee container_id
 - docker ps -a
 - docker start $(cat container_id)
 - sleep 10
 - docker ps -a
 - docker inspect --format '{{ .NetworkSettings.IPAddress }}' $(cat container_id) | tee container_ip
-- ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@$(cat container_ip) ps awxuf
+- ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p 2222 root@$(cat container_ip) ps awxuf
 
 script:
 # - docker exec -t $(cat container_id) cat /var/log/yunohost-installation.log
