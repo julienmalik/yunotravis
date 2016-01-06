@@ -20,19 +20,21 @@ RUN apt-get update --quiet
 #RUN wget https://raw.githubusercontent.com/YunoHost/install_script/master/install_yunohostv2 -O /tmp/install_yunohostv2
 ADD install_yunohostv2 /tmp/
 
+# dnsmasq installation fails with :
+# "dnsmasq: setting capabilities failed: Operation not permitted"
+# Apply workaround of https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=514214
+RUN echo user=root > /etc/dnsmasq.conf
+
+RUN bash /tmp/install_yunohostv2 -a -d testing || true
+
 # The install script failed to start dovecot because it is already started
 # Running separately the package doesn't work better because it is in trigger
 # That's why there is these killall & apt-get install -y
 # If you know how do it better don't hesitate to pull request
-RUN bash /tmp/install_yunohostv2 -a -d testing || true
 #RUN killall dovecot || true
 #RUN apt-get install -y --force-yes  || true
 #RUN killall dovecot || true
 #RUN apt-get install -y --force-yes
-
-# Fix dnsmasq fail on postinstall
-RUN echo '' >> /etc/dnsmasq.conf
-RUN echo user=root >> /etc/dnsmasq.conf
 
 # ADD firstrun /sbin/postinstall
 # RUN chmod a+x /sbin/postinstall
