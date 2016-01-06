@@ -42,25 +42,14 @@ Failure !
 The following error was caught during Yunohost installation :
 
 $1
-" >> $YUNOHOST_LOG
-
-    # Print to terminal
-    tput setf 4
-    print "Failure !"
-    tput sgr 0
-
-    print "\
-The following error was caught during YunoHost installation :
-
-$1
-" 1>&2
+" | tee -a $YUNOHOST_LOG
 
     notify_about_install_logs
     exit "${2:-1}"
 }
 
 step() {
-  printf "[ $(date --rfc-3339=seconds) ] ----- [ entering %-30s ]\n" "$1" >> $YUNOHOST_LOG
+  printf "[ $(date --rfc-3339=seconds) ] ----- [ entering %-30s ]\n" "$1" | tee -a $YUNOHOST_LOG
   $*
   local return_code="$?"
   return $return_code
@@ -82,7 +71,7 @@ apt_get_wrapper() {
           --                                           \
           apt-get $*
     else
-        apt-get $* >> $YUNOHOST_LOG 2>&1
+        apt-get $* 2>&1 | tee -a $YUNOHOST_LOG
     fi
 }
 
@@ -172,12 +161,12 @@ setup_package_source() {
     else
         # Check current system version and dependencies
         if [[ $(lsb_release -c | awk '{print $2}') != jessie ]]; then
-            echo "Current $DISTRIB only works on Debian Jessie for the moment."
+            print "Current $DISTRIB only works on Debian Jessie for the moment." | tee -a $YUNOHOST_LOG
             return 1
         elif [ ! -d /run/systemd/system ]; then
             # echo "Current $DISTRIB only works with systemd for the moment."
             # return 1
-            echo "No systemd, but continuing anyway..."
+            print "No systemd, but continuing anyway..." | tee -a $YUNOHOST_LOG
         fi
 
         # Make use of new repository
@@ -261,7 +250,7 @@ workaround_avahi_installation() {
 
     # Return without error if avahi already exists
     if id avahi > /dev/null 2>&1 ; then
-        print "User avahi already exists (with uid $(id avahi)), skipping avahi workaround" >> $YUNOHOST_LOG
+        print "User avahi already exists (with uid $(id avahi)), skipping avahi workaround" | tee -a $YUNOHOST_LOG
         return 0
     fi
 
@@ -272,7 +261,7 @@ workaround_avahi_installation() {
         avahi_id=$((500 + RANDOM % 500))
     done
 
-    print "Workaround for avahi : creating avahi user with uid $avahi_id" >> $YUNOHOST_LOG
+    print "Workaround for avahi : creating avahi user with uid $avahi_id" | tee -a $YUNOHOST_LOG
 
     # Use the same adduser parameter as in the avahi-daemon postinst script
     # Just specify --uid explicitely
