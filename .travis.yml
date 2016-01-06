@@ -14,3 +14,4 @@ before_install:
 
 script:
 - docker exec -t $(cat container_id) cat /var/log/yunohost-installation.log
+- docker exec -t $(cat container_id) ps awxuf
