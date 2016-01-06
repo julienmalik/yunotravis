@@ -1,0 +1,17 @@
+sudo: required
+
+language: python
+
+services:
+- docker
+
+before_install:
+- docker build -t ju/ynh .
+- docker create --name yunotest -d -h yunohost.yunotest-1.nohost.me -p 127.0.0.1:80:80 ju/ynh /sbin/init | tee docker_create_output
+- docker ps -a
+- docker start $(cat docker_create_output)
+- docker ps -a
+
+script:
+- echo "Hello world"
+- docker exec -t $(cat docker_create_output) dpkg -l
