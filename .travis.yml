@@ -6,8 +6,7 @@ services:
 - docker
 
 before_install:
-- ssh-keygen -t rsa -N ''
-- cp ~/.ssh/id_rsa.pub .
+- ssh-keygen -t rsa -N '' -f ssh_key
 - docker build -t ju/ynh .
 - docker create --name yunotest -h yunohost.yunotest-1.nohost.me -p 127.0.0.1:80:80 ju/ynh /sbin/init | tee container_id
 - docker ps -a

@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL C
 ENV TERM=xterm
 
-COPY id_rsa.pub /root/.ssh/authorized_keys
+COPY ssh_key.pub /root/.ssh/authorized_keys
 
 RUN rm -f /usr/sbin/policy-rc.d
 RUN apt-get update --quiet
