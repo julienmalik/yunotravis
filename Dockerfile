@@ -6,6 +6,7 @@ ENV LC_ALL C
 ENV TERM=xterm
 
 COPY ssh_key.pub /root/.ssh/authorized_keys
+RUN chmod 700 /root/.ssh
 RUN chmod 600 /root/.ssh/authorized_keys
 
 # See http://joeyh.name/blog/entry/docker_run_debian/
