@@ -22,6 +22,7 @@ before_install:
 - export CONTAINER_ID=$(cat container_id)
 - docker start ${CONTAINER_ID}
 - docker ps
+- docker port yunotest
 
 # Setup ssh on host for connection to the docker container
 - eval `ssh-agent -s`
