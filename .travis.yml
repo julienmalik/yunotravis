@@ -6,6 +6,8 @@ services:
 - docker
 
 before_install:
+- export DOMAIN=docker.yunotest.me
+
 # Generate SSH key for connection to the docker container
 - ssh-keygen -t rsa -N '' -f ssh_key
 - cp ssh_key ~/.ssh
@@ -16,7 +18,7 @@ before_install:
 - docker build -t ju/ynh .
 
 # Create and start a docker container from the docker image
-- docker create --name yunotest -h docker.yunotest.me -p 22 -p 80:80 -p 443:443 ju/ynh /sbin/init | tee container_id
+- docker create --name yunotest -h ${DOMAIN} -p 22 -p 80:80 -p 443:443 ju/ynh /sbin/init | tee container_id
 - export CONTAINER_ID=$(cat container_id)
 - docker start ${CONTAINER_ID}
 
@@ -51,8 +53,14 @@ before_install:
 #- dockerex service rmilter start
 - dockerex ps awxuf
 - ssh -v ynh ps awxuf || true
-- dockerex tail -n 100 /var/log/auth.log
-- dockerex tail -n 100 /var/log/syslog
-
+- dockerex ls -al /var/log
+- dockerex cat /var/log/auth.log
+- dockerex cat /var/log/syslog
+- dockerex dpkg --divert /sbin/iptables /sbin/iptables.divert
+- dockerex ln -s /bin/true /sbin/iptables
+- dockerex dpkg --divert /sbin/ip6tables /sbin/ip6tables.divert
+- dockerex ln -s /bin/true /sbin/ip6tables
+- dockerex yunohost tools postinstall -d ${DOMAIN} -p yunohost
+- dockerex ps awxuf
 script:
 - sudo ps awxuf
