@@ -64,7 +64,7 @@ before_install:
 - dockerex cat /var/log/syslog
 
 # Setup diversion for executable so that they always exit gracefully
-- dockerdivertexe() { dockerex dpkg-divert --add --local --rename ${1}.divert ${1} ; ln -s /bin/true ${1} ; }
+- dockerdivertexe() { dockerex dpkg-divert --local --rename --add ${1}.divert ${1} ; ln -s /bin/true ${1} ; }
 
 # Docker handles the firewall itself, and we don't really care here
 - dockerdivertexe /sbin/iptables
