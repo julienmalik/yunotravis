@@ -21,6 +21,7 @@ before_install:
 - docker create --name yunotest -h ${DOMAIN} -p 22 -p 80:80 -p 443:443 ju/ynh /sbin/init | tee container_id
 - export CONTAINER_ID=$(cat container_id)
 - docker start ${CONTAINER_ID}
+- docker ps
 
 # Setup ssh on host for connection to the docker container
 - eval `ssh-agent -s`
