@@ -63,19 +63,16 @@ before_install:
 - dockerex cat /var/log/auth.log
 - dockerex cat /var/log/syslog
 
+# Setup diversion for executable so that they always exit gracefully
+- dockerdivertexe() { dockerex dpkg-divert --add --local --rename ${1}.divert ${1} ; ln -s /bin/true ${1} ; }
+
 # Docker handles the firewall itself, and we don't really care here
-- dockerex dpkg-divert --divert /sbin/iptables.divert --rename /sbin/iptables
-- dockerex ln -s /bin/true /sbin/iptables
-- dockerex dpkg-divert --divert /sbin/ip6tables.divert --rename /sbin/ip6tables
-- dockerex ln -s /bin/true /sbin/ip6tables
-
-# Dovecot fails to start in the container (TODO : figure out why)
-- dockerex dpkg-divert --divert /etc/init.d/dovecot.divert --rename /etc/init.d/dovecot
-- dockerex ln -s /bin/true /etc/init.d/dovecot
-
+- dockerdivertexe /sbin/iptables
+- dockerdivertexe /sbin/ip6tables
+# dovecot fails to start in the container (TODO : figure out why)
+- dockerdivertexe /etc/init.d/dovecot
 # avahi-daemon fails to start in the container (TODO : figure out why)
-- dockerex dpkg-divert --divert /etc/init.d/avahi-daemon.divert --rename /etc/init.d/avahi-daemon
-- dockerex ln -s /bin/true /etc/init.d/avahi-daemon
+- dockerdivertexe /etc/init.d/avahi-daemon
 
 # Run yunohost postinstall
 - dockerex yunohost tools postinstall --verbose --debug -d ${DOMAIN} -p yunohost
