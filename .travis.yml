@@ -70,7 +70,7 @@ before_install:
 - dockerex ln -s /bin/true /sbin/ip6tables
 
 # Dovecot fails to start in the container (TODO)
-- dockerex dpkg-divert --divert /etc/init.d/dovecot --rename /etc/init.d/dovecot.divert
+- dockerex dpkg-divert --divert /etc/init.d/dovecot.divert --rename /etc/init.d/dovecot
 - dockerex ln -s /bin/true /etc/init.d/dovecot
 
 # Run yunohost postinstall
