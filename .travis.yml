@@ -73,6 +73,10 @@ before_install:
 - dockerdivertexe /etc/init.d/dovecot
 # avahi-daemon fails to start in the container (TODO : figure out why)
 - dockerdivertexe /etc/init.d/avahi-daemon
+# systemctl is used directly by yunohost to restart some services,
+# and this generates 'Failed to get D-Bus connection: Unknown error -1'
+# let's make it quiet
+- dockerdivertexe /bin/systemctl
 
 # Run yunohost postinstall
 - dockerex yunohost tools postinstall --verbose --debug -d ${DOMAIN} -p yunohost
