@@ -60,7 +60,8 @@ before_install:
 - dockerex ln -s /bin/true /sbin/iptables
 - dockerex dpkg-divert --divert /sbin/ip6tables.divert --rename /sbin/ip6tables
 - dockerex ln -s /bin/true /sbin/ip6tables
-- dockerex yunohost tools postinstall -d ${DOMAIN} -p yunohost
+- dockerex yunohost tools postinstall --verbose --debug -d ${DOMAIN} -p yunohost
 - dockerex ps awxuf
+- dockerex cat /var/log/yunohost/yunohost-cli.log
 script:
 - sudo ps awxuf
