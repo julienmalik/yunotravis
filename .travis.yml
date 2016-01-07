@@ -35,8 +35,8 @@ before_install:
 - dockerex() { docker exec -t -i ${CONTAINER_ID} $* ; }
 - dockerex ps awxuf
 - dockerex hostname -d
-- dockerex ls -al /root
-- dockerex ls -al /root/.ssh
+
+# Start all services because we have a too simple init in docker
 - dockerex service ssh start
 - dockerex service cron start
 - dockerex service rsyslog start
@@ -52,16 +52,31 @@ before_install:
 #- dockerex service rspamd start
 #- dockerex service rmilter start
 - dockerex ps awxuf
+
+# TODO : still can't find a way to set up ssh between host and the container
+- dockerex ls -al /root
+- dockerex ls -al /root/.ssh
 - ssh -v ynh ps awxuf || true
+
+# Inspect logs
 - dockerex ls -al /var/log
 - dockerex cat /var/log/auth.log
 - dockerex cat /var/log/syslog
+
+# Docker handles the firewall itself, and we don't really care here
 - dockerex dpkg-divert --divert /sbin/iptables.divert --rename /sbin/iptables
 - dockerex ln -s /bin/true /sbin/iptables
 - dockerex dpkg-divert --divert /sbin/ip6tables.divert --rename /sbin/ip6tables
 - dockerex ln -s /bin/true /sbin/ip6tables
+
+# Dovecot fails to start in the container (TODO)
+- dockerex dpkg-divert --divert /etc/init.d/dovecot --rename /etc/init.d/dovecot.divert
+- dockerex ln -s /bin/true /etc/init.d/dovecot
+
+# Run yunohost postinstall
 - dockerex yunohost tools postinstall --verbose --debug -d ${DOMAIN} -p yunohost
 - dockerex ps awxuf
 - dockerex cat /var/log/yunohost/yunohost-cli.log
+
 script:
 - sudo ps awxuf
