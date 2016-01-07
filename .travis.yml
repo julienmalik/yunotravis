@@ -79,7 +79,7 @@ before_install:
 - dockerdivertexe /bin/systemctl
 
 # Run yunohost postinstall
-- dockerex yunohost tools postinstall --verbose --debug -d ${DOMAIN} -p yunohost
+- dockerex yunohost tools postinstall --verbose --debug -d ${DOMAIN} -p yunohost --ignore-dyndns
 - dockerex ps awxuf
 - dockerex cat /var/log/yunohost/yunohost-cli.log
 
