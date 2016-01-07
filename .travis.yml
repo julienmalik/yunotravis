@@ -32,7 +32,7 @@ before_install:
 - cat ~/.ssh/config
 
 # Check connection to the container
-- dockerex() { docker exec -i ${CONTAINER_ID} $* ; }
+- dockerex() { docker exec -t -i ${CONTAINER_ID} $* ; }
 - dockerex ps awxuf
 - dockerex hostname -d
 - dockerex ls -al /root
