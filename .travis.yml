@@ -33,26 +33,26 @@ before_install:
 - dockerex() { docker exec -i ${CONTAINER_ID} $* ; }
 - dockerex ps awxuf
 - dockerex hostname -d
-- docker exec -i ${CONTAINER_ID} ls -al /root
-- docker exec -i ${CONTAINER_ID} ls -al /root/.ssh
-- docker exec -i ${CONTAINER_ID} service ssh start
-- docker exec -i ${CONTAINER_ID} service cron start
-- docker exec -i ${CONTAINER_ID} service rsyslog start
-- docker exec -i ${CONTAINER_ID} service dnsmasq start
-- docker exec -i ${CONTAINER_ID} service slapd start
-- docker exec -i ${CONTAINER_ID} service nscd start
-- docker exec -i ${CONTAINER_ID} service nslcd start
-- docker exec -i ${CONTAINER_ID} service metronome start
-- docker exec -i ${CONTAINER_ID} service nginx start
-- docker exec -i ${CONTAINER_ID} service php5-fpm start
-- docker exec -i ${CONTAINER_ID} service postfix start
-- docker exec -i ${CONTAINER_ID} service dovecot start
-- docker exec -i ${CONTAINER_ID} service rspamd start
-- docker exec -i ${CONTAINER_ID} service rmilter start
-- docker exec -i ${CONTAINER_ID} ps awxuf
+- dockerex ls -al /root
+- dockerex ls -al /root/.ssh
+- dockerex service ssh start
+- dockerex service cron start
+- dockerex service rsyslog start
+- dockerex service slapd start
+- dockerex service nscd start
+- dockerex service nslcd start
+- dockerex service nginx start
+- dockerex service php5-fpm start
+#- dockerex service dnsmasq start
+#- dockerex service metronome start
+#- dockerex service postfix start
+#- dockerex service dovecot start
+#- dockerex service rspamd start
+#- dockerex service rmilter start
+- dockerex ps awxuf
 - ssh -v ynh ps awxuf || true
-- docker exec -i ${CONTAINER_ID} tail -n 100 /var/log/auth.log
-- docker exec -i ${CONTAINER_ID} tail -n 100 /var/log/syslog
+- dockerex tail -n 100 /var/log/auth.log
+- dockerex tail -n 100 /var/log/syslog
 
 script:
 - sudo ps awxuf
