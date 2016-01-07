@@ -56,9 +56,9 @@ before_install:
 - dockerex ls -al /var/log
 - dockerex cat /var/log/auth.log
 - dockerex cat /var/log/syslog
-- dockerex dpkg-divert --divert /sbin/iptables --rename /sbin/iptables.divert
+- dockerex dpkg-divert --divert /sbin/iptables.divert --rename /sbin/iptables
 - dockerex ln -s /bin/true /sbin/iptables
-- dockerex dpkg-divert --divert /sbin/ip6tables --rename /sbin/ip6tables.divert
+- dockerex dpkg-divert --divert /sbin/ip6tables.divert --rename /sbin/ip6tables
 - dockerex ln -s /bin/true /sbin/ip6tables
 - dockerex yunohost tools postinstall -d ${DOMAIN} -p yunohost
 - dockerex ps awxuf
