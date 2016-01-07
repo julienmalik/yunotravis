@@ -69,9 +69,13 @@ before_install:
 - dockerex dpkg-divert --divert /sbin/ip6tables.divert --rename /sbin/ip6tables
 - dockerex ln -s /bin/true /sbin/ip6tables
 
-# Dovecot fails to start in the container (TODO)
+# Dovecot fails to start in the container (TODO : figure out why)
 - dockerex dpkg-divert --divert /etc/init.d/dovecot.divert --rename /etc/init.d/dovecot
 - dockerex ln -s /bin/true /etc/init.d/dovecot
+
+# avahi-daemon fails to start in the container (TODO : figure out why)
+- dockerex dpkg-divert --divert /etc/init.d/avahi-daemon.divert --rename /etc/init.d/avahi-daemon
+- dockerex ln -s /bin/true /etc/init.d/avahi-daemon
 
 # Run yunohost postinstall
 - dockerex yunohost tools postinstall --verbose --debug -d ${DOMAIN} -p yunohost
