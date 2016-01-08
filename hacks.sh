@@ -40,8 +40,6 @@ dockerdivertexe /etc/init.d/dnsmasq
 # usdisk-glue is normally started via systemd, and does not ship a sysvinit script replacement
 ln -s /bin/true /etc/init.d/udisks-glue
 
-
-
 # Temporary FIX: try to not use "tr" to avoid https://dev.yunohost.org/issues/149
 # dockerex sed -i 's@randpass 10 0@openssl rand -base64 16@g' /usr/share/yunohost/hooks/conf_regen/34-mysql
 # Temporary FIX: skip mysql completely, to see if this is the one stalling the postinstall
