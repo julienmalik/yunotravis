@@ -41,8 +41,42 @@ dockerdivertexe /etc/init.d/dnsmasq
 ln -s /bin/true /etc/init.d/udisks-glue
 
 # Temporary FIX: try to not use "tr" to avoid https://dev.yunohost.org/issues/149
-dockerex sed -i 's@randpass 10 0@openssl rand -base64 16@g' /usr/share/yunohost/hooks/conf_regen/34-mysql
-dockerex sed -i "s@echo \$mysql_password | sudo tee /etc/yunohost/mysql@echo \$mysql_password > /etc/yunohost/mysql@g" /usr/share/yunohost/hooks/conf_regen/34-mysql
+#dockerex sed -i 's@randpass 10 0@openssl rand -base64 16@g' /usr/share/yunohost/hooks/conf_regen/34-mysql
+#dockerex sed -i "s@echo \$mysql_password | sudo tee /etc/yunohost/mysql@echo \$mysql_password > /etc/yunohost/mysql@g" /usr/share/yunohost/hooks/conf_regen/34-mysql
+
+dockerex sh -c 'cat > /usr/share/yunohost/hooks/conf_regen/34-mysql' << EOF
+#!/bin/bash
+set -e
+
+force=$1
+
+function safe_copy () {
+    if [[ "$force" == "True" ]]; then
+        sudo yunohost service safecopy \
+          -s mysql $1 $2 --force
+    else
+        sudo yunohost service safecopy \
+          -s mysql $1 $2
+    fi
+}
+
+cd /usr/share/yunohost/templates/mysql
+
+if [[ "$(safe_copy my.cnf /etc/mysql/my.cnf | tail -n1)" == "True" ]]; then
+    sudo service mysql restart
+fi
+
+if [ ! -f /etc/yunohost/mysql ]; then
+    [[ $(/bin/ps aux | grep '[m]ysqld') == "0" ]] \
+      && sudo service mysql start
+
+    sudo openssl rand -out /etc/yunohost/mysql -base64 16
+    sudo chmod 400 /etc/yunohost/mysql
+    sudo mysqladmin -u root -pyunohost password $(sudo cat /etc/yunohost/mysql)
+fi
+EOF
+
+dockerex cat /usr/share/yunohost/hooks/conf_regen/34-mysql
 
 # Temporary FIX: skip mysql completely, to see if this is the one stalling the postinstall
 # dockerex rm /usr/share/yunohost/hooks/conf_regen/34-mysql
