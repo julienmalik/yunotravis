@@ -2,16 +2,14 @@
 
 set -x
 
-echo "Container : ${CONTAINER_ID}"
-
 dockerex() {
-  docker exec -t -i ${CONTAINER_ID} $*
+  docker exec -t -i ${CONTAINER_ID} "$@"
 }
 
 # Setup diversion for executable so that they always exit gracefully
 dockerdivertexe() {
-  dockerex dpkg-divert --rename $1
-  dockerex ln -s /bin/true $1
+  dockerex dpkg-divert --rename "$1"
+  dockerex ln -s /bin/true "$1"
 }
 
 # Docker handles the firewall itself, and we don't really care here
@@ -27,5 +25,5 @@ dockerdivertexe /etc/init.d/avahi-daemon
 dockerdivertexe /bin/systemctl
 
 # Temporary FIX: try to not use "tr" to avoid https://dev.yunohost.org/issues/149
-dockerex sed -i \"s@randpass 10 0@openssl rand -base64 16@g\" /usr/share/yunohost/hooks/conf_regen/34-mysql
+dockerex sed -i 's@randpass 10 0@openssl rand -base64 16@g' /usr/share/yunohost/hooks/conf_regen/34-mysql
 
