@@ -44,7 +44,7 @@ ln -s /bin/true /etc/init.d/udisks-glue
 #dockerex sed -i 's@randpass 10 0@openssl rand -base64 16@g' /usr/share/yunohost/hooks/conf_regen/34-mysql
 #dockerex sed -i "s@echo \$mysql_password | sudo tee /etc/yunohost/mysql@echo \$mysql_password > /etc/yunohost/mysql@g" /usr/share/yunohost/hooks/conf_regen/34-mysql
 
-dockerex sh -c 'cat > /usr/share/yunohost/hooks/conf_regen/34-mysql' << EOF
+cat > /tmp/mysql.regen << EOF
 #!/bin/bash
 set -e
 
@@ -76,6 +76,7 @@ if [ ! -f /etc/yunohost/mysql ]; then
 fi
 EOF
 
+dockerex sh -c 'cat > /usr/share/yunohost/hooks/conf_regen/34-mysql' < /tmp/mysql.regen
 dockerex cat /usr/share/yunohost/hooks/conf_regen/34-mysql
 
 # Temporary FIX: skip mysql completely, to see if this is the one stalling the postinstall
