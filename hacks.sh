@@ -2,9 +2,16 @@
 
 set -x
 
+echo "Container : ${CONTAINER_ID}"
+
+dockerex() {
+  docker exec -t -i ${CONTAINER_ID} $*
+}
+
 # Setup diversion for executable so that they always exit gracefully
 dockerdivertexe() {
-  dockerex dpkg-divert --rename "${1}"; dockerex ln -s /bin/true "${1}";
+  dockerex dpkg-divert --rename $1
+  dockerex ln -s /bin/true $1
 }
 
 # Docker handles the firewall itself, and we don't really care here
