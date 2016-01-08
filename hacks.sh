@@ -27,5 +27,5 @@ dockerdivertexe /etc/init.d/avahi-daemon
 dockerdivertexe /bin/systemctl
 
 # Temporary FIX: try to not use "tr" to avoid https://dev.yunohost.org/issues/149
-dockerex sed -i 's@randpass 10 0@openssl rand -base64 16@g' /usr/share/yunohost/hooks/conf_regen/34-mysql
+dockerex sed -i \"s@randpass 10 0@openssl rand -base64 16@g\" /usr/share/yunohost/hooks/conf_regen/34-mysql
 
