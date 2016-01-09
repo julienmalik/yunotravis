@@ -26,7 +26,7 @@ if [ ! -f /etc/yunohost/mysql ]; then
     sudo openssl rand -out /etc/yunohost/mysql -base64 16
     sudo chmod 400 /etc/yunohost/mysql
 
-    mysql --no-defaults -u root -h localhost << EOF
+    mysql --no-defaults --user=root --password=yunohost << EOF
 USE mysql;
 UPDATE user SET password=PASSWORD("$rootpw") WHERE user='root';
 FLUSH PRIVILEGES;
@@ -35,3 +35,5 @@ EOF
     #sudo aptitude install strace
     #sudo strace mysqladmin --user=root --password=yunohost --protocol=TCP password "$(sudo cat /etc/yunohost/mysql)"
 fi
+
+echo "We are here"
