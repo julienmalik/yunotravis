@@ -25,5 +25,5 @@ if [ ! -f /etc/yunohost/mysql ]; then
 
     sudo openssl rand -out /etc/yunohost/mysql -base64 16
     sudo chmod 400 /etc/yunohost/mysql
-    sudo mysqladmin -u root -pyunohost password $(sudo cat /etc/yunohost/mysql)
+    sudo mysqladmin --user=root --password=yunohost --protocol=TCP password $(sudo cat /etc/yunohost/mysql)
 fi
