@@ -27,8 +27,8 @@ dockerdivertexe /bin/systemctl
 # so calls to 'service yunohost-firewall command" error out with :
 # update-rc.d: error: cannot find a LSB script for yunohost-firewall
 # yunohost-firewall: unrecognized service
-ln -s /bin/true /etc/init.d/yunohost-firewall
-ln -s /bin/true /etc/init.d/yunohost-firewall
+dockerex ln -s /bin/true /etc/init.d/yunohost-firewall
+dockerex ln -s /bin/true /etc/init.d/yunohost-firewall
 # Since we put aside iptables, fail2ban becomes useless too. Make it quiet
 dockerdivertexe /etc/init.d/fail2ban
 # Glances generates errors
@@ -38,7 +38,7 @@ dockerdivertexe /etc/init.d/glances
 # Just put it aside since we don't really care here
 dockerdivertexe /etc/init.d/dnsmasq
 # usdisk-glue is normally started via systemd, and does not ship a sysvinit script replacement
-ln -s /bin/true /etc/init.d/udisks-glue
+dockerex ln -s /bin/true /etc/init.d/udisks-glue
 
 # Temporary FIX: try to not use "tr" to avoid https://dev.yunohost.org/issues/149
 #dockerex sed -i 's@randpass 10 0@openssl rand -base64 16@g' /usr/share/yunohost/hooks/conf_regen/34-mysql
