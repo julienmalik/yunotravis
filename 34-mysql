@@ -28,7 +28,7 @@ if [ ! -f /etc/yunohost/mysql ]; then
 
     mysql --no-defaults --user=root --password=yunohost << EOF
 USE mysql;
-UPDATE user SET password=PASSWORD("$rootpw") WHERE user='root';
+UPDATE user SET password=PASSWORD("$(sudo cat /etc/yunohost/mysql)") WHERE user='root';
 FLUSH PRIVILEGES;
 EOF
 
