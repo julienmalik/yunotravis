@@ -3,7 +3,7 @@
 set -x
 
 dockerex() {
-  docker exec -t -i ${CONTAINER_ID} "$@"
+  docker exec -i ${CONTAINER_ID} "$@"
 }
 
 # Setup diversion for executable so that they always exit gracefully
@@ -44,39 +44,7 @@ dockerex ln -s /bin/true /etc/init.d/udisks-glue
 #dockerex sed -i 's@randpass 10 0@openssl rand -base64 16@g' /usr/share/yunohost/hooks/conf_regen/34-mysql
 #dockerex sed -i "s@echo \$mysql_password | sudo tee /etc/yunohost/mysql@echo \$mysql_password > /etc/yunohost/mysql@g" /usr/share/yunohost/hooks/conf_regen/34-mysql
 
-cat > /tmp/mysql.regen << EOF
-#!/bin/bash
-set -e
-
-force=$1
-
-function safe_copy () {
-    if [[ "$force" == "True" ]]; then
-        sudo yunohost service safecopy \
-          -s mysql $1 $2 --force
-    else
-        sudo yunohost service safecopy \
-          -s mysql $1 $2
-    fi
-}
-
-cd /usr/share/yunohost/templates/mysql
-
-if [[ "$(safe_copy my.cnf /etc/mysql/my.cnf | tail -n1)" == "True" ]]; then
-    sudo service mysql restart
-fi
-
-if [ ! -f /etc/yunohost/mysql ]; then
-    [[ $(/bin/ps aux | grep '[m]ysqld') == "0" ]] \
-      && sudo service mysql start
-
-    sudo openssl rand -out /etc/yunohost/mysql -base64 16
-    sudo chmod 400 /etc/yunohost/mysql
-    sudo mysqladmin -u root -pyunohost password $(sudo cat /etc/yunohost/mysql)
-fi
-EOF
-
-dockerex sh -c 'cat > /usr/share/yunohost/hooks/conf_regen/34-mysql' < /tmp/mysql.regen
+dockerex sh -c 'cat > /usr/share/yunohost/hooks/conf_regen/34-mysql' < 34-mysql
 dockerex cat /usr/share/yunohost/hooks/conf_regen/34-mysql
 
 # Temporary FIX: skip mysql completely, to see if this is the one stalling the postinstall
