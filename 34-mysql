@@ -26,8 +26,8 @@ sudo service mysql restart
 #    [[ $(/bin/ps aux | grep '[m]ysqld') == "0" ]] \
 #      && sudo service mysql start
 
-    sudo openssl rand -out /etc/yunohost/mysql -base64 16
-    sudo chmod 400 /etc/yunohost/mysql
+#    sudo openssl rand -out /etc/yunohost/mysql -base64 16
+#    sudo chmod 400 /etc/yunohost/mysql
 
 #    mysql --no-defaults --user=root --password=yunohost << EOF
 #USE mysql;
