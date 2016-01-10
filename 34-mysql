@@ -32,7 +32,7 @@ UPDATE user SET password=PASSWORD("$(sudo cat /etc/yunohost/mysql)") WHERE user=
 FLUSH PRIVILEGES;
 EOF
 
-    #sudo aptitude install strace
+    #sudo apt-get install strace
     #sudo strace mysqladmin --user=root --password=yunohost --protocol=TCP password "$(sudo cat /etc/yunohost/mysql)"
 fi
 
