@@ -15,13 +15,16 @@ function safe_copy () {
 
 cd /usr/share/yunohost/templates/mysql
 
-if [[ "$(safe_copy my.cnf /etc/mysql/my.cnf | tail -n1)" == "True" ]]; then
-    sudo service mysql restart
-fi
+#if [[ "$(safe_copy my.cnf /etc/mysql/my.cnf | tail -n1)" == "True" ]]; then
+#    sudo service mysql restart
+#fi
+safe_copy my.cnf /etc/mysql/my.cnf
+sudo service mysql restart
 
-if [ ! -f /etc/yunohost/mysql ]; then
-    [[ $(/bin/ps aux | grep '[m]ysqld') == "0" ]] \
-      && sudo service mysql start
+#if [ ! -f /etc/yunohost/mysql ]; then
+
+#    [[ $(/bin/ps aux | grep '[m]ysqld') == "0" ]] \
+#      && sudo service mysql start
 
     sudo openssl rand -out /etc/yunohost/mysql -base64 16
     sudo chmod 400 /etc/yunohost/mysql
@@ -34,6 +37,6 @@ if [ ! -f /etc/yunohost/mysql ]; then
 
     #sudo apt-get install strace
     #sudo strace mysqladmin --user=root --password=yunohost --protocol=TCP password "$(sudo cat /etc/yunohost/mysql)"
-fi
+#fi
 
 echo "We are here"
