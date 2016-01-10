@@ -18,8 +18,8 @@ cd /usr/share/yunohost/templates/mysql
 #if [[ "$(safe_copy my.cnf /etc/mysql/my.cnf | tail -n1)" == "True" ]]; then
 #    sudo service mysql restart
 #fi
-safe_copy my.cnf /etc/mysql/my.cnf
-sudo service mysql restart
+#safe_copy my.cnf /etc/mysql/my.cnf
+#sudo service mysql restart
 
 #if [ ! -f /etc/yunohost/mysql ]; then
 
@@ -40,3 +40,4 @@ sudo service mysql restart
 #fi
 
 echo "We are here"
+exit 0
