@@ -19,7 +19,7 @@ cd /usr/share/yunohost/templates/mysql
 #    sudo service mysql restart
 #fi
 safe_copy my.cnf /etc/mysql/my.cnf
-#sudo service mysql restart
+sudo env DEBIAN_SCRIPT_DEBUG=1 service mysql restart
 
 #if [ ! -f /etc/yunohost/mysql ]; then
 
