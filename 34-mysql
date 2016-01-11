@@ -20,6 +20,8 @@ cd /usr/share/yunohost/templates/mysql
 #fi
 safe_copy my.cnf /etc/mysql/my.cnf
 
+ps awxuf
+
 sudo apt-get -y --force-yes --no-install-recommends install strace
 sudo strace service mysql restart
 
@@ -40,6 +42,8 @@ sudo strace service mysql restart
     #sudo apt-get install strace
     #sudo strace mysqladmin --user=root --password=yunohost --protocol=TCP password "$(sudo cat /etc/yunohost/mysql)"
 #fi
+
+ps awxuf
 
 echo "We are here"
 exit 0
