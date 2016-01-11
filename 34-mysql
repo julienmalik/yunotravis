@@ -19,7 +19,6 @@ cd /usr/share/yunohost/templates/mysql
 #    sudo service mysql restart
 #fi
 safe_copy my.cnf /etc/mysql/my.cnf
-
 ps awxuf
 
 sudo apt-get -y --force-yes --no-install-recommends install strace
