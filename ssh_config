@@ -1,5 +1,5 @@
 Host ynh
-  Hostname {{DOCKER_CONTAINER_IP}}
+  Hostname 127.0.0.1
   Port {{DOCKER_CONTAINER_SSH_PORT}}
   User root
   IdentityFile {{TRAVIS_HOME}}/.ssh/ssh_key
