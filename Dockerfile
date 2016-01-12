@@ -1,13 +1,9 @@
 FROM debian:jessie
-MAINTAINER ljf "valentin@grimaud.me"
+MAINTAINER ju "ju+docker@paraiso.me"
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL C
-ENV TERM=xterm
-
-COPY ssh_key.pub /root/.ssh/authorized_keys
-RUN chmod 700 /root/.ssh
-RUN chmod 600 /root/.ssh/authorized_keys
+ENV TERM xterm
 
 # See http://joeyh.name/blog/entry/docker_run_debian/
 RUN rm -f /usr/sbin/policy-rc.d
@@ -22,7 +18,7 @@ ADD install_yunohostv2 /tmp/
 # Apply workaround of https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=514214
 RUN echo user=root > /etc/dnsmasq.conf
 
-RUN apt-get install -y --force-yes mysql-server
+RUN apt-get install -y --force-yes mysql-server-5.5
 RUN bash /tmp/install_yunohostv2 -a -d testing || true
 RUN apt-get install -y --force-yes  || true
 

@@ -35,12 +35,19 @@ before_install:
 - sed -i "s@{{DOCKER_CONTAINER_SSH_PORT}}@$(docker port ${CONTAINER_ID} 22 | cut -d ':' -f 2)@g" ssh_config
 - sed -i "s@{{TRAVIS_HOME}}@${HOME}@g" ssh_config
 - cp ssh_config ~/.ssh/config
-- cat ~/.ssh/config
 
 # Check connection to the container
-- dockerex() { docker exec -t -i ${CONTAINER_ID} "$@" ; }
+- dockerex() { docker exec -i ${CONTAINER_ID} "$@" ; }
+- dockerex() { docker exec -i ${CONTAINER_ID} "$@" ; }
+
 - dockerex ps awxuf
 - dockerex hostname -d
+
+# Prepare container for ssh connection
+- dockerex mkdir /root/.ssh
+- dockerex sh -c 'cat > /root/.ssh/authorized_keys' < ssh_key.pub
+- dockerex chmod 700 /root/.ssh
+- dockerex chmod 600 /root/.ssh/authorized_keys
 
 # Start all services because we have a too simple init in docker
 - dockerex service ssh start
@@ -57,17 +64,7 @@ before_install:
 #- dockerex service dovecot start
 #- dockerex service rspamd start
 #- dockerex service rmilter start
-- dockerex ps awxuf
-
-# TODO : still can't find a way to set up ssh between host and the container
-- dockerex ls -al /root
-- dockerex ls -al /root/.ssh
-- ssh -v ynh ps awxuf || true
-
-# Inspect logs
-- dockerex ls -al /var/log
-- dockerex cat /var/log/auth.log
-- dockerex cat /var/log/syslog
+- ssh ynh ps awxuf
 
 # Various hacks for running yunohost in docker container
 - bash hacks.sh
@@ -79,3 +76,4 @@ before_install:
 
 script:
 - sudo ps awxuf
+- ssh ynh ps awxuf
