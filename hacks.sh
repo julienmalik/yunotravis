@@ -45,12 +45,12 @@ dockerex ln -s /bin/true /etc/init.d/udisks-glue
 #dockerex sed -i "s@echo \$mysql_password | sudo tee /etc/yunohost/mysql@echo \$mysql_password > /etc/yunohost/mysql@g" /usr/share/yunohost/hooks/conf_regen/34-mysql
 
 # Teporary FIX: overridden 34-mysql
-dockerex sh -c 'cat > /usr/share/yunohost/hooks/conf_regen/34-mysql' < 34-mysql
-dockerex cat /usr/share/yunohost/hooks/conf_regen/34-mysql
+#dockerex sh -c 'cat > /usr/share/yunohost/hooks/conf_regen/34-mysql' < 34-mysql
+#dockerex cat /usr/share/yunohost/hooks/conf_regen/34-mysql
 
 # Patched init script for mariadb
-dockerex sh -c 'cat > /etc/init.d/mysql' < mariadb.init
-dockerex cat /etc/init.d/mysql
+#dockerex sh -c 'cat > /etc/init.d/mysql' < mariadb.init
+#dockerex cat /etc/init.d/mysql
 
 # Temporary FIX: skip mysql completely, to see if this is the one stalling the postinstall
 # dockerex rm /usr/share/yunohost/hooks/conf_regen/34-mysql
