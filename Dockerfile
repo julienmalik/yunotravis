@@ -18,7 +18,8 @@ ADD install_yunohostv2 /tmp/
 # Apply workaround of https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=514214
 RUN echo user=root > /etc/dnsmasq.conf
 
-RUN apt-get install -y --force-yes mysql-server-5.5
+RUN apt-get update
+RUN apt-get -y install mysql-server
 RUN bash /tmp/install_yunohostv2 -a -d testing || true
 RUN apt-get install -y --force-yes  || true
 
