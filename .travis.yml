@@ -38,7 +38,6 @@ before_install:
 
 # Check connection to the container
 - dockerex() { docker exec -i ${CONTAINER_ID} "$@" ; }
-- dockerex() { docker exec -i ${CONTAINER_ID} "$@" ; }
 
 - dockerex ps awxuf
 - dockerex hostname -d
@@ -50,29 +49,31 @@ before_install:
 - dockerex chmod 600 /root/.ssh/authorized_keys
 
 # Start all services because we have a too simple init in docker
-- dockerex service ssh start
-- dockerex service cron start
-- dockerex service rsyslog start
-- dockerex service slapd start
-- dockerex service nscd start
-- dockerex service nslcd start
-- dockerex service nginx start
-- dockerex service php5-fpm start
-#- dockerex service dnsmasq start
-#- dockerex service metronome start
-#- dockerex service postfix start
-#- dockerex service dovecot start
-#- dockerex service rspamd start
-#- dockerex service rmilter start
+- ssh ynh service ssh start
+- ssh ynh service cron start
+- ssh ynh service rsyslog start
+- ssh ynh service slapd start
+- ssh ynh service nscd start
+- ssh ynh service nslcd start
+- ssh ynh service nginx start
+- ssh ynh service php5-fpm start
+#- ssh ynh service dnsmasq start
+#- ssh ynh service metronome start
+#- ssh ynh service postfix start
+#- ssh ynh service dovecot start
+#- ssh ynh service rspamd start
+#- ssh ynh service rmilter start
 - ssh ynh ps awxuf
 
 # Various hacks for running yunohost in docker container
 - bash hacks.sh
+- ssh ynh dpkg-divert --rename /usr/share/yunohost/hooks/conf_regen/O6-slapd
+- scp 06-slapd ynh:/usr/share/yunohost/hooks/conf_regen/O6-slapd
 
 # Run yunohost postinstall
-- dockerex yunohost tools postinstall --verbose --debug -d ${DOMAIN} -p yunohost --ignore-dyndns
-- dockerex ps awxuf
-- dockerex cat /var/log/yunohost/yunohost-cli.log
+- ssh ynh yunohost tools postinstall --verbose --debug -d ${DOMAIN} -p yunohost --ignore-dyndns
+- ssh ynh ps awxuf
+- ssh ynh cat /var/log/yunohost/yunohost-cli.log
 
 script:
 - sudo ps awxuf
